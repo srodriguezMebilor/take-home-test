@@ -119,6 +119,15 @@ Se reemplazó el logging por defecto por un pipeline de **Logging Estructurado**
 
 - **Visualización:** Integración con **Seq** para centralizar y analizar logs. En la siguiente imagen se observa el rastreo de una transacción exitosa y el detalle de las consultas SQL:
 
+
+## Consideraciones de Seguridad
+
+- **Validación Robusta:** Se implementaron validaciones de entrada en la capa de aplicación para asegurar la integridad de los datos antes de llegar a la persistencia.
+- **Protección de Contratos (DTOs):** Se utilizan Records inmutables para evitar ataques de sobre-asignación de datos y ocultar la estructura interna de la base de datos.
+- **Manejo de Excepciones:** Se configuró un manejo global de errores para evitar la fuga de trazas de pila (stack traces) sensibles en las respuestas HTTP.
+- **Próximos Pasos (Seguridad):** Para un entorno de Producción, se contempla la integración de **ASP.NET Core Identity con JWT** para asegurar que solo usuarios autenticados con el rol Admin puedan procesar pagos.
+
+
 ## Stack Tecnológico
 
 - **Core:** .NET 8.0 (Web API)
