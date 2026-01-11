@@ -127,6 +127,7 @@ Se reemplazó el logging por defecto por un pipeline de **Logging Estructurado**
 - **Manejo de Excepciones:** Se configuró un manejo global de errores para evitar la fuga de trazas de pila (stack traces) sensibles en las respuestas HTTP.
 - **Próximos Pasos (Seguridad):** Para un entorno de Producción, se contempla la integración de **ASP.NET Core Identity con JWT** para asegurar que solo usuarios autenticados con el rol Admin puedan procesar pagos.
 
+> **Nota sobre Autenticación:** En esta versión se priorizó la lógica de negocio y la consistencia de datos. En un entorno productivo, se integraría **ASP.NET Core Identity con JWT (JSON Web Tokens)** para implementar autenticación y autorización basada en roles (RBAC).
 
 ## Stack Tecnológico
 

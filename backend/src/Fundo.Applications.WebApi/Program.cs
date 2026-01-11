@@ -45,6 +45,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+else
+{
+    // Esto evita que se vea el detalle del error en producción
+    app.UseExceptionHandler("/error");
+}
 
 // Aplicar migraciones automáticamente al iniciar (de utilidad en Docker)
 using (var scope = app.Services.CreateScope())
