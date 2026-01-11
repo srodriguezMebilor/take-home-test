@@ -29,24 +29,24 @@ Feel free to modify the code as needed, but try to **respect and extend the curr
 ## Fundo - Loan Management System (Extended Edition)
 **Por Sebastián Rodríguez**
 
-Este proyecto es una implementación profesional de un sistema de gestión de préstamos, basada en el codebase original de **Fundo**[cite: 1, 2]. El objetivo es extender la arquitectura base para soportar entornos de alta concurrencia y mejorar la observabilidad mediante telemetría moderna[cite: 3].
+Este proyecto es una implementación profesional de un sistema de gestión de préstamos, basada en el codebase original de **Fundo**. El objetivo es extender la arquitectura base para soportar entornos de alta concurrencia y mejorar la observabilidad mediante telemetría moderna.
 
 ## Decisiones de Arquitectura y Diseño
 
 ### 1. Desacoplamiento de la Capa de Datos (DI & IoC)
-Se implementó **Inyección de Dependencias** en la infraestructura de persistencia[cite: 7].
-- **Implementación:** El sistema depende de la interfaz `IAppDbContext` en lugar de la clase concreta `AppDbContext`[cite: 8].
-- **Beneficio:** Facilita la creación de **Pruebas Unitarias** (Mocking) y el cambio de motor de base de datos sin afectar la lógica de negocio[cite: 9].
+Se implementó **Inyección de Dependencias** en la infraestructura de persistencia.
+- **Implementación:** El sistema depende de la interfaz `IAppDbContext` en lugar de la clase concreta `AppDbContext`.
+- **Beneficio:** Facilita la creación de **Pruebas Unitarias** (Mocking) y el cambio de motor de base de datos sin afectar la lógica de negocio.
 
 ### 2. Encapsulamiento y Seguridad (DTOs)
-Uso de **Records de C# 12** para la transferencia de datos (`LoanDTO`)[cite: 11].
-- **Propósito:** Evitar la exposición de detalles internos (como el `Timestamp` de concurrencia) en los contratos de la API[cite: 12].
-- **Ventaja:** Garantiza la inmutabilidad de los datos y un código más limpio[cite: 13].
+Uso de **Records de C# 12** para la transferencia de datos (`LoanDTO`).
+- **Propósito:** Evitar la exposición de detalles internos (como el `Timestamp` de concurrencia) en los contratos de la API.
+- **Ventaja:** Garantiza la inmutabilidad de los datos y un código más limpio.
 
 ### 3. Control de Concurrencia Optimista
-Para asegurar la integridad de los saldos, se implementó un mecanismo de **Concurrency Tokens**[cite: 15].
-- **Técnica:** Propiedad `RowVersion` gestionada por SQL Server para evitar bloqueos pesados (Pessimistic Locking)[cite: 16, 17].
-- **Simulación:** Se integró un sistema de flags en `appsettings.json` para simular latencia de red y validar colisiones de datos[cite: 18, 24]:
+Para asegurar la integridad de los saldos, se implementó un mecanismo de **Concurrency Tokens**.
+- **Técnica:** Propiedad `RowVersion` gestionada por SQL Server para evitar bloqueos pesados (Pessimistic Locking).
+- **Simulación:** Se integró un sistema de flags en `appsettings.json` para simular latencia de red y validar colisiones de datos:
   ```json
   "FeatureManagement": {
     "EnableConcurrencyTestDelay": true,
