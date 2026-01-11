@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "Fundo.Applications.WebApi": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "swagger", 
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:53296;http://localhost:53297"
+    }
+  }
+}

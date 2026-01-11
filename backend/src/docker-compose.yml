@@ -1,0 +1,52 @@
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sql_server_loan_db
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=YourStrong@Password123
+      - MSSQL_MEMORY_LIMIT_MB=1536
+    ports:
+      - "1433:1433"
+    deploy:
+      resources:
+        limits:
+          memory: 2G # Limite fisico que Docker le asigna al contenedor
+    volumes:
+      - sqlvolume:/var/opt/mssql
+
+  backend:
+    build:
+      context: .
+      dockerfile: Fundo.Applications.WebApi/Dockerfile
+    ports:
+      - "5000:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=db;Database=LoanDb;User Id=sa;Password=YourStrong@Password123;TrustServerCertificate=True;
+    depends_on:
+      - db
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+
+  seq:
+    image: datalust/seq:latest
+    container_name: seq-logs
+    hostname: seq-server
+    environment:
+        - ACCEPT_EULA=Y
+        - SEQ_FIRING_LINE_SIZE=1000 # Reduce presion de memoria inicial
+        - SEQ_FIRSTRUN_NOAUTHENTICATION=true
+    ports:
+        - "5341:80"  # Puerto para la UI de Seq
+    deploy:
+      resources:
+        limits:
+          memory: 1G # Seq necesita esto para no entrar en crash loop
+
+volumes:
+  sqlvolume:
+ 
+
