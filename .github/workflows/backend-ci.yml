@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
     paths:
       - 'backend/**'
-      - 'docker-compose.yml' # Agregamos esto por si cambias la config de docker
+      - 'docker-compose.yml'
   pull_request:
     branches: [ "main" ]
     paths:
@@ -17,17 +17,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # 1. Descargar tu código
     - uses: actions/checkout@v4
 
-    # 2. Levantar los contenedores y correr los tests
-    # --build: Asegura que se compile la última versión de tu código
-    # --exit-code-from tests: Si los tests pasan, GitHub se pone verde. Si fallan, rojo.
-    # tests: Solo levanta el servicio 'tests' y su dependencia ('db')
+
     - name: Run Integration Tests via Docker Compose
       run: docker-compose up --build --exit-code-from tests tests
 
-    # 3. Limpieza (Opcional, pero buena práctica para ver logs finales)
     - name: Teardown
-      if: always() # Se ejecuta aunque los tests fallen
+      if: always() 
       run: docker-compose down
