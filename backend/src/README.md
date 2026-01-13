@@ -145,3 +145,4 @@ Se reemplazó el logging por defecto por un pipeline de **Logging Estructurado**
 - **Levantar Infraestructura:** docker-compose up -d
 - **Correr API:** dotnet run --project src/Fundo.Applications.WebApi
 - **Explorar:** Acceder a <http://localhost:53296/swagger> 
+
