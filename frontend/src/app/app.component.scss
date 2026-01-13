@@ -22,6 +22,64 @@
     color: #7b8187;
   }
 }
+.btn-pay {
+  background-color: #2e7d32 !important; /* Verde financiero */
+  color: white !important;
+  font-weight: 500;
+  border-radius: 8px; /* Bordes un poco más redondeados */
+  padding: 0 16px;
+  transition: all 0.3s ease; /* Suaviza la animación */
+  
+  /* Ajuste para separar el icono del texto */
+  mat-icon {
+    margin-right: 5px;
+  }
+
+  /* Efecto al pasar el mouse */
+  &:hover {
+    background-color: #1b5e20 !important; /* Verde más oscuro */
+    transform: translateY(-2px); /* Se levanta un poquito */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Sombra más pronunciada */
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.paid-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px; 
+  
+  background-color: #e8f5e9; 
+  color: #2e7d32;            
+  padding: 6px 12px;
+  border-radius: 20px;       
+  font-weight: 600;
+  font-size: 0.9rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+
+  mat-icon {
+    font-size: 18px;       
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.fab-add-btn {
+  position: fixed !important;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+  background-color: #1976d2 !important; 
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+
+  &:hover {
+    transform: scale(1.1) rotate(90deg); 
+  }
+}
 
 @media (max-width: 992px) {
   .loans {

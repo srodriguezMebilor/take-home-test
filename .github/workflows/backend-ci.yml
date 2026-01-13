@@ -1,0 +1,48 @@
+name: Backend CI
+
+# Se ejecuta cuando haces push a main o abres un PR
+# PERO solo si hubo cambios dentro de la carpeta 'backend'
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'backend/**'
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - 'backend/**'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    # Definimos el directorio de trabajo predeterminado para los comandos dotnet
+    defaults:
+      run:
+        working-directory: ./backend/src
+
+    steps:
+    - uses: actions/checkout@v4
+
+    # 1. Configurar .NET 8 (Ajusta la versión si usas otra)
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    # 2. Restaurar dependencias (NuGet)
+    - name: Restore dependencies
+      run: dotnet restore src.sln
+
+    # 3. Compilar el proyecto
+    - name: Build
+      run: dotnet build src.sln --no-restore --configuration Release
+
+    # 4. Ejecutar los Tests
+    - name: Test
+      run: dotnet test src.sln --no-build --verbosity normal --configuration Release
+
+    # 5. Verificar que la imagen de Docker se construye correctamente
+    # Nota: Usamos el contexto '.' (backend/src) y apuntamos al Dockerfile específico
+    - name: Build Docker Image (Check)
+      run: docker build -f Fundo.Applications.WebApi/Dockerfile .
