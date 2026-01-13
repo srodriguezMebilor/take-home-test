@@ -45,7 +45,7 @@ services:
       - db
     # Comando: Espera 10s (para que SQL arranque) -> Restaura paquetes -> Corre los tests
     command: >
-      bash -c "sleep 10 &&
+      bash -c "sleep 100 &&
       dotnet restore &&
       dotnet test --logger 'console;verbosity=normal'"
   frontend:
