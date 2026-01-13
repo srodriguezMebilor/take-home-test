@@ -2,6 +2,7 @@
 
 namespace Fundo.Applications.WebApi.Models
 {
+
     public class Loan
     {
         public int Id { get; set; }
