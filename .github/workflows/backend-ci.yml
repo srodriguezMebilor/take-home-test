@@ -21,8 +21,8 @@ jobs:
 
 
     - name: Run Integration Tests via Docker Compose
-      run: docker-compose up --build --exit-code-from tests tests
+      run: docker compose up --build --exit-code-from tests tests
 
     - name: Teardown
       if: always() 
-      run: docker-compose down
+      run: docker compose down
