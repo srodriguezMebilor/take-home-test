@@ -1,5 +1,6 @@
 ﻿using Fundo.Applications.WebApi.Data;
 using Fundo.Applications.WebApi.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -64,24 +65,13 @@ namespace Fundo.Applications.WebApi.Controllers
             });
         }
 
-        // POST: loan/
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(LoanDto))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [EndpointDescription("Crea un nuevo préstamo validando que el monto coincida con el balance actual.")]
         [HttpPost]
         public async Task<ActionResult<LoanDto>> CreateLoan(LoanDto loan)
         {
 
-            //if (loan.Id != 0)
-            //    return BadRequest(new { message = "The Id of the loan must be zero" });
-            //if (loan.Amount <= 0)
-            //    return BadRequest(new { message = "The amount must be greater than zero" });
-
-            //if (loan.CurrentBalance != loan.Amount)
-            //    return BadRequest(new { message = "The amount must be equals to current balance" });
-
-            //if (string.IsNullOrEmpty(loan.ApplicantName))
-            //    return BadRequest(new { message = "The applicant name can not be empty" });
-
-            //if (loan.Status != "active")
-            //    return BadRequest(new { message = "The status must be active" });
 
             // Creo la entidad en una variable local
             var newLoanEntity = new Loan
@@ -106,8 +96,11 @@ namespace Fundo.Applications.WebApi.Controllers
             return CreatedAtAction(nameof(GetLoan), new { newLoanEntity.Id }, finalDto);
         }
 
-        // POST: loan/{id}/payment
         [HttpPost("{id}/payment")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [EndpointDescription("Registra un pago para un préstamo específico, deduciéndolo del balance actual y actualizando el estado a 'paid' si el balance llega a cero.")]
         public async Task<IActionResult> MakePayment(int id, [FromBody] decimal paymentAmount)
         {
             try

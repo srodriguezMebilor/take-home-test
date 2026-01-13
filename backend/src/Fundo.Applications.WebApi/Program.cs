@@ -1,14 +1,16 @@
-using System;
-using System.Threading; // Necesario para el Sleep
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using Serilog;
 using Fundo.Applications.WebApi.Data;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Serilog;
+using System;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Threading; // Necesario para el Sleep
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,34 +57,38 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader();
     });
 });
-
-// 4. Servicios API
-/*
-builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
-{
-    options.InvalidModelStateResponseFactory = context =>
-    {
-        // Tomamos el primer error encontrado
-        var error = context.ModelState.Values
-            .SelectMany(v => v.Errors)
-            .Select(e => e.ErrorMessage)
-            .FirstOrDefault();
-
-        return new BadRequestObjectResult(new { message = error });
-    };
-});*/
-
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    // 1. Define la información básica 
+    options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Title = "Loan Management API",
+        Version = "v1",
+        Description = "API para la gestión y creación de préstamos con validaciones automáticas."
+    });
+
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFilename);
+
+    if (File.Exists(xmlPath))
+    {
+        options.IncludeXmlComments(xmlPath);
+    }
+});
 
 var app = builder.Build();
 
-// 5. Middleware
-app.UseSwagger();
-app.UseSwaggerUI();
 
+
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/error");
