@@ -43,6 +43,7 @@ services:
       - ConnectionStrings__DefaultConnection=Server=db;Database=LoanDb;User Id=sa;Password=YourStrong@Password123;TrustServerCertificate=True;
     depends_on:
       - db
+    profiles: ["test"]
     # Comando: Espera 10s (para que SQL arranque) -> Restaura paquetes -> Corre los tests
     command: >
       bash -c "sleep 100 &&
